@@ -2,13 +2,33 @@
 import json
 import shodan
 import sys
+import time
+import itertools
+import threading
+
+start_time = time.time()
+done = False
+def animate():
+    for c in itertools.cycle(['|', '/', '-', '\\']):
+        if done:
+            break
+        sys.stdout.write('\rLoading ' + c)
+        sys.stdout.flush()
+        time.sleep(0.1)
+    sys.stdout.write('\rDone!     ')
+t = threading.Thread(target=animate)
+t.daemon = True
+t.start()
 
 #IPAddr = input("Please Enter IP to Lookup: ")
 SHODAN_API_KEY = "YOUR API KEY HERE"
 
 api = shodan.Shodan(SHODAN_API_KEY)
 
-#Takes a text file named ipaddr.txt with a single IP address on each line
+with open('output.txt','w') as f:
+        f.write("")
+        f.close()
+
 txt_file = open("ipaddr.txt","r")
 for IPAddr in txt_file.read().splitlines():
 
@@ -16,7 +36,7 @@ for IPAddr in txt_file.read().splitlines():
                 # Lookup the host
                 host = api.host(IPAddr)
 
-                output = " Results for " + IPAddr + ":\n Ports Found: : " + str(host.get('ports','n/a')) +  "\n Vulnerablities Found: " + str(host.get('vulns','n/a'))
+                output = " Results for " + IPAddr + ":\n Last Updated: " + str(host['last_update']) + "\n Ports Found: : " + str(host.get('ports','n/a\n')) +  "\n Vulnerablities Found: " + str(host.get('vulns','n/a\n\n'))
 
                 for item in host['data']:
                         if item.get('vulns'):
@@ -26,7 +46,9 @@ for IPAddr in txt_file.read().splitlines():
                         f.write(output)
 
         except Exception as e:
-                output = "Results for " + IPAddr + ": " + 'Error {}'.format(e) + "\n"
+                output = " Results for " + IPAddr + ": " + 'Error {}'.format(e) + "\n\n"
 
                 with open('output.txt','a') as f:
                         f.write(output)
+done = True
+print("--- %s seconds ---" % (time.time() - start_time))
