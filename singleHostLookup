@@ -18,11 +18,11 @@ try:
                 if item.get('vulns'):
                         output += '{}'.format(json.dumps(item.get('vulns'),indent=3),'')
 
-        with open('output.txt','w') as f:
+        with open('output.json','w') as f:
                 f.write(output)
 
 except Exception as e:
         output = "Results for " + IPAddr + ": " + 'Error {}'.format(e) + "\n"
 
-        with open('output.txt','w') as f:
+        with open('output.json','w') as f:
                 f.write(output)
