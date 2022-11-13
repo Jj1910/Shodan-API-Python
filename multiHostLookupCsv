@@ -1,0 +1,57 @@
+#!/bin/python3
+import json
+import shodan
+import sys
+import time
+import itertools
+import threading
+import csv
+
+start_time = time.time()
+done = False
+def animate():
+    for c in itertools.cycle(['|', '/', '-', '\\']):
+        if done:
+            print('\nDone!')
+            break
+        sys.stdout.write('\rLoading ' + c)
+        sys.stdout.flush()
+        time.sleep(0.1)
+    sys.stdout.write('\rDone!     ')
+t = threading.Thread(target=animate)
+t.daemon = True
+t.start()
+
+SHODAN_API_KEY = "YOUR API KEY HERE"
+
+api = shodan.Shodan(SHODAN_API_KEY)
+
+with open('output.txt','w') as f:
+        f.write("")
+        f.close()
+#Takes ipaddresses.csv file with the headers, ip and name
+with open('ipaddresses.csv') as file_obj:
+
+        reader_obj = csv.DictReader(file_obj)
+
+        for row in reader_obj:
+                try:
+                        # Lookup the host
+                        host = api.host(row['ip'])
+
+                        output = " Results for " + row['ip'] + " " + row['name'] + ":\n Last Updated: " + str(host['last_update']) + "\n Ports Found: : " + str(host.get('ports','n/a\n')) +  "\n Vulnerablities Found: " + str(host.get('vulns','n/a\n\n'))
+
+                        for item in host['data']:
+                                if item.get('vulns'):
+                                        output += '{}'.format(json.dumps(item.get('vulns'),indent=3),'') + "\n\n"
+
+                        with open('output.txt','a') as f:
+                                f.write(output)
+
+                except Exception as e:
+                        output = " Results for " + row['ip'] + " " + row['name'] + ": " + 'Error {}'.format(e) + "\n\n"
+
+                        with open('output.txt','a') as f:
+                                f.write(output)
+done = True
+print("\n--- %s seconds ---" % (time.time() - start_time))
