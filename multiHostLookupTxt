@@ -20,7 +20,6 @@ t = threading.Thread(target=animate)
 t.daemon = True
 t.start()
 
-#IPAddr = input("Please Enter IP to Lookup: ")
 SHODAN_API_KEY = "YOUR API KEY HERE"
 
 api = shodan.Shodan(SHODAN_API_KEY)
