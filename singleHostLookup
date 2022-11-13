@@ -1,0 +1,28 @@
+#!/bin/python3
+import json
+import shodan
+import sys
+
+IPAddr = input("Please Enter IP to Lookup: ")
+SHODAN_API_KEY = "YOUR API KEY HERE"
+
+api = shodan.Shodan(SHODAN_API_KEY)
+
+try:
+        # Lookup the host
+        host = api.host(IPAddr)
+
+        output = " Results for " + IPAddr + ": \n Ports Found: : " + str(host.get('ports','n/a')) + "\n Vulnerablities Found: " + str(host.get('vulns','n/a'))
+
+        for item in host['data']:
+                if item.get('vulns'):
+                        output += '{}'.format(json.dumps(item.get('vulns'),indent=3),'')
+
+        with open('output.txt','w') as f:
+                f.write(output)
+
+except Exception as e:
+        output = "Results for " + IPAddr + ": " + 'Error {}'.format(e) + "\n"
+
+        with open('output.txt','w') as f:
+                f.write(output)
