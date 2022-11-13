@@ -26,7 +26,7 @@ SHODAN_API_KEY = "YOUR API KEY HERE"
 
 api = shodan.Shodan(SHODAN_API_KEY)
 
-with open('output.txt','w') as f:
+with open('output.json','w') as f:
         f.write("")
         f.close()
 #Takes ipaddresses.csv file with the headers, ip and name
@@ -39,19 +39,19 @@ with open('ipaddresses.csv') as file_obj:
                         # Lookup the host
                         host = api.host(row['ip'])
 
-                        output = " Results for " + row['ip'] + " " + row['name'] + ":\n Last Updated: " + str(host['last_update']) + "\n Ports Found: : " + str(host.get('ports','n/a\n')) +  "\n Vulnerablities Found: " + str(host.get('vulns','n/a\n\n'))
+                        output = " \"Results for " + row['ip'] + " " + row['name'] + "\":\n \"Last Updated\": \"" + str(host['last_update']) + "\"\n \"Ports Found\": " + str(host.get('ports','\"n/a\"\n')) +  "\n \"Vulnerablities Found\": \"" + str(host.get('vulns','n/a')) + "\"\n\n"
 
                         for item in host['data']:
                                 if item.get('vulns'):
                                         output += '{}'.format(json.dumps(item.get('vulns'),indent=3),'') + "\n\n"
 
-                        with open('output.txt','a') as f:
+                        with open('output.json','a') as f:
                                 f.write(output)
 
                 except Exception as e:
-                        output = " Results for " + row['ip'] + " " + row['name'] + ": " + 'Error {}'.format(e) + "\n\n"
+                        output = " \"Results for " + row['ip'] + " " + row['name'] + "\": \"" + 'Error {}'.format(e) + "\"\n\n"
 
-                        with open('output.txt','a') as f:
+                        with open('output.json','a') as f:
                                 f.write(output)
 done = True
 print("\n--- %s seconds ---" % (time.time() - start_time))
