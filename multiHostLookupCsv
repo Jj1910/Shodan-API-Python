@@ -42,7 +42,7 @@ with open('output.json','a') as f:
                                 # Lookup the host
                                 host = api.host(row['ip'])
 
-                                output = " \"Results for " + row['ip'] + " " + row['name'] + "\":\n \"Last Updated\": \"" + str(host['last_update']) + "\"\n \"Ports Found\": " + str(host.get('ports','\"n/a\"\n')) +  "\n \"Vulnerablities>
+                                output = " \"Results for " + row['ip'] + " " + row['name'] + "\":\n \"Last Updated\": \"" + str(host['last_update']) + "\"\n \"Ports Found\": " + str(host.get('ports','\"n/a\"\n')) +  "\n \"Vulnerablities Found\": \"" + str(host.get('vulns','n/a')) + "\"\n\n"
 
                                 for item in host['data']:
                                         if item.get('vulns'):
