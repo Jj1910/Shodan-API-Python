@@ -11,6 +11,7 @@ done = False
 def animate():
     for c in itertools.cycle(['|', '/', '-', '\\']):
         if done:
+            print("\nDone!")
             break
         sys.stdout.write('\rLoading ' + c)
         sys.stdout.flush()
@@ -50,4 +51,4 @@ for IPAddr in txt_file.read().splitlines():
                 with open('output.json','a') as f:
                         f.write(output)
 done = True
-print("--- %s seconds ---" % (time.time() - start_time))
+print("\n--- %s seconds ---" % (time.time() - start_time))
