@@ -24,7 +24,7 @@ SHODAN_API_KEY = "YOUR API KEY HERE"
 
 api = shodan.Shodan(SHODAN_API_KEY)
 
-with open('output.txt','w') as f:
+with open('output.json','w') as f:
         f.write("")
         f.close()
 
@@ -41,13 +41,13 @@ for IPAddr in txt_file.read().splitlines():
                         if item.get('vulns'):
                                 output += '{}'.format(json.dumps(item.get('vulns'),indent=3),'') + "\n\n"
 
-                with open('output.txt','a') as f:
+                with open('output.json','a') as f:
                         f.write(output)
 
         except Exception as e:
                 output = " Results for " + IPAddr + ": " + 'Error {}'.format(e) + "\n\n"
 
-                with open('output.txt','a') as f:
+                with open('output.json','a') as f:
                         f.write(output)
 done = True
 print("--- %s seconds ---" % (time.time() - start_time))
