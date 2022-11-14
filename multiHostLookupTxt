@@ -35,7 +35,7 @@ for IPAddr in txt_file.read().splitlines():
                 # Lookup the host
                 host = api.host(IPAddr)
 
-                output = " Results for " + IPAddr + ":\n Last Updated: " + str(host['last_update']) + "\n Ports Found: : " + str(host.get('ports','n/a\n')) +  "\n Vulnerablities Found: " + str(host.get('vulns','n/a\n\n'))
+                output = " \"Results for " + row['ip'] + " " + row['name'] + "\":\n \"Last Updated\": \"" + str(host['last_update']) + "\"\n \"Ports Found\": " + str(host.get('ports','\"n/a\"\n')) +  "\n \"Vulnerablities Found\": \"" + str(host.get('vulns','n/a')) + "\"\n\n"
 
                 for item in host['data']:
                         if item.get('vulns'):
